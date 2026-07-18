@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#05080c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MySpiritMic">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Spirit Mic — Analisi audio reale</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header><div><div class="eyebrow">REAL MICROPHONE ANALYZER</div><h1>SPIRIT MIC</h1><div class="sub">Ascolto e analisi ambientale reale. Nessuna voce inserita.</div></div><div id="status" class="status"><span class="dot"></span><span id="statusText">IN ATTESA</span></div></header>
+
+<section class="card">
+<canvas id="spectrum"></canvas><canvas id="wave"></canvas>
+<div class="hud">
+<div class="metric"><span>Banda</span><strong id="band">300–3400 <small>Hz</small></strong></div>
+<div class="metric"><span>Livello RMS</span><strong id="db">−∞ <small>dBFS</small></strong><div class="meter"><i id="bar"></i></div></div>
+<div class="metric"><span>Picco</span><strong id="peak">— <small>Hz</small></strong></div>
+</div>
+<div class="buttons"><button id="start" class="btn">ATTIVA MICROFONO</button><button id="record" class="btn record" disabled>REGISTRA</button></div>
+</section>
+
+<section class="card">
+<div class="title">Modalità</div>
+<div id="modes" class="seg"><button data-mode="voice" class="active">VOCE</button><button data-mode="wide">AMPIA</button><button data-mode="sweep">SWEEP</button></div>
+<div class="control"><div class="control-head"><span>Soglia evento</span><b id="thresholdLabel">−38 dB</b></div><input id="threshold" type="range" min="-65" max="-12" value="-38"></div>
+<div class="control"><div class="control-head"><span>Sensibilità variazioni</span><b id="sensitivityLabel">55%</b></div><input id="sensitivity" type="range" min="10" max="95" value="55"></div>
+<div id="sweepControl" class="control hidden"><div class="control-head"><span>Velocità sweep</span><b id="sweepLabel">1.8 s</b></div><input id="sweepSpeed" type="range" min="4" max="35" value="18"></div>
+<div class="row"><div class="copy"><b>Marcatura automatica</b><small>Segna cambiamenti reali di livello e spettro.</small></div><label class="switch"><input id="autoMark" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="row"><div class="copy"><b>Monitor filtrato</b><small>Solo con cuffie: altrimenti può fischiare.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div>
+</section>
+
+<section class="card">
+<div class="title">Registro sessione</div><div id="events" class="events"><div class="empty">Nessun evento.</div></div>
+<div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA ORA</button><button id="clear" class="btn secondary">AZZERA</button></div>
+<div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SCARICA AUDIO</button><button id="saveLog" class="btn secondary">SCARICA LOG</button></div>
+</section>
+
+<section class="card"><div class="note"><b>Funzione effettiva:</b> usa il microfono dell’iPhone, misura spettro e intensità, filtra bande audio e registra. Non riceve AM/FM e non identifica automaticamente l’origine di un suono.</div><div class="tech">Per il microfono Safari richiede una pagina HTTPS e il consenso dell’utente. Tenere Safari in primo piano. Il monitor resta spento finché non viene attivato.</div></section>
+</div>
+<script src="app.js" defer></script>
+</body></html>
