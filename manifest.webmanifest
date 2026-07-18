@@ -1,0 +1,12 @@
+{
+  "name": "MySpiritMic",
+  "short_name": "SpiritMic",
+  "description": "Analizzatore audio ambientale in tempo reale per iPhone.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#05080c",
+  "theme_color": "#05080c",
+  "orientation": "portrait-primary",
+  "lang": "it-IT"
+}
