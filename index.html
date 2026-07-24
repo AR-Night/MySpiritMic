@@ -9,50 +9,38 @@
 <meta name="apple-mobile-web-app-title" content="EVP Recorder">
 <link rel="manifest" href="manifest.webmanifest">
 <title>EVP Recorder Lab</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
 <div class="app">
-<header>
-  <div><div class="eyebrow">FIELD AUDIO ANALYSIS</div><h1>EVP RECORDER <em>LAB</em></h1><div class="sub">Registrazione automatica a eventi, spettrogramma temporale e analisi dei suoni non classificati.</div></div>
-  <div id="status" class="status"><span class="dot"></span><span id="statusText">IN ATTESA</span></div>
-</header>
-
+<header><div><div class="eyebrow">FIELD AUDIO ANALYSIS</div><h1>EVP RECORDER <em>LAB</em></h1><div class="sub">Registrazione automatica a eventi, spettrogramma temporale e analisi dei suoni non classificati.</div></div><div id="status" class="status"><span class="dot"></span><span id="statusText">IN ATTESA</span></div></header>
 <section class="card recorder-card">
-  <div class="screen-label"><span>SPETTROGRAMMA LIVE</span><span id="elapsed">00:00.0</span></div>
-  <div class="spectrogram-wrap">
-    <canvas id="spectrum" aria-label="Spettrogramma in tempo reale"></canvas>
-    <div id="markerLayer" class="marker-layer" aria-hidden="true"></div>
-  </div>
-  <canvas id="wave" aria-label="Forma d'onda"></canvas>
-  <div class="legend"><span><i class="normal"></i>ambiente</span><span><i class="voice"></i>possibile voce</span><span><i class="anomaly"></i>evento sospetto EVP</span></div>
-  <div class="hud">
-    <div class="metric"><span>Stato analisi</span><strong id="analysisState">—</strong></div>
-    <div class="metric"><span>Livello RMS</span><strong id="db">−∞ <small>dBFS</small></strong><div class="meter"><i id="bar"></i></div></div>
-    <div class="metric"><span>Picco</span><strong id="peak">— <small>Hz</small></strong></div>
-  </div>
-  <div class="buttons"><button id="start" class="btn">ATTIVA MICROFONO</button><button id="record" class="btn record" disabled>REGISTRA SESSIONE</button></div>
+<div class="screen-label"><span>SPETTROGRAMMA LIVE</span><span id="elapsed">00:00.0</span></div>
+<div class="spectrogram-wrap"><canvas id="spectrum"></canvas><div id="markerLayer" class="marker-layer"></div></div>
+<canvas id="wave"></canvas>
+<div class="legend"><span><i class="normal"></i>ambiente</span><span><i class="voice"></i>possibile voce</span><span><i class="anomaly"></i>evento sospetto EVP</span></div>
+<div class="hud"><div class="metric"><span>Stato analisi</span><strong id="analysisState">—</strong></div><div class="metric"><span>Livello RMS</span><strong id="db">−∞ <small>dBFS</small></strong><div class="meter"><i id="bar"></i></div></div><div class="metric"><span>Picco</span><strong id="peak">— <small>Hz</small></strong></div></div>
+<div class="buttons"><button id="start" class="btn">ATTIVA MICROFONO</button><button id="record" class="btn record" disabled>REGISTRA SESSIONE</button></div>
 </section>
-
 <section class="card">
-  <div class="title">Rilevamento automatico</div>
-  <div class="row"><div class="copy"><b>Clip automatiche</b><small>Conserva circa 4 secondi prima e 5 secondi dopo ogni evento.</small></div><label class="switch"><input id="autoClip" type="checkbox" checked><span class="slider"></span></label></div>
-  <div class="control"><div class="control-head"><span>Soglia minima</span><b id="thresholdLabel">−42 dB</b></div><input id="threshold" type="range" min="-65" max="-18" value="-42"></div>
-  <div class="control"><div class="control-head"><span>Sensibilità anomalie</span><b id="sensitivityLabel">62%</b></div><input id="sensitivity" type="range" min="20" max="95" value="62"></div>
-  <div class="row"><div class="copy"><b>Monitor filtrato</b><small>Attivare solo con cuffie per evitare feedback.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div>
+<div class="title">Rilevamento automatico</div>
+<div class="row"><div class="copy"><b>Clip automatiche WAV</b><small>Conserva circa 4 secondi prima e 5 secondi dopo ogni evento.</small></div><label class="switch"><input id="autoClip" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="control"><div class="control-head"><span>Soglia minima</span><b id="thresholdLabel">−42 dB</b></div><input id="threshold" type="range" min="-65" max="-18" value="-42"></div>
+<div class="control"><div class="control-head"><span>Sensibilità anomalie</span><b id="sensitivityLabel">62%</b></div><input id="sensitivity" type="range" min="20" max="95" value="62"></div>
+<div class="row"><div class="copy"><b>Monitor filtrato</b><small>Attivare solo con cuffie per evitare feedback.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div>
 </section>
-
 <section class="card">
-  <div class="title">Eventi e clip</div>
-  <div id="events" class="events"><div class="empty">Nessun evento rilevato.</div></div>
-  <div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA ORA</button><button id="clear" class="btn secondary">AZZERA</button></div>
-  <div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SALVA SESSIONE</button><button id="saveLog" class="btn secondary">SALVA LOG</button></div>
+<div class="title">Parole possibili</div>
+<div class="transcript"><div id="speechSupport" class="speech-status">Verifica supporto del browser…</div><div id="transcriptText" class="transcript-text">Nessuna trascrizione.</div><div id="transcriptMeta" class="transcript-meta">La trascrizione è sperimentale e può interpretare il rumore come parole.</div></div>
+<button id="speechToggle" class="btn secondary full" disabled>AVVIA RICONOSCIMENTO PAROLE</button>
 </section>
-
-<section class="card disclaimer">
-  <div class="note"><b>Interpretazione corretta:</b> i marker indicano segnali acustici insoliti o compatibili con il parlato. Non dimostrano un'origine paranormale. Ogni clip va confrontata con rumori ambientali, persone presenti, traffico e dispositivi elettronici.</div>
-  <div class="tech">Su iPhone aprire in Safari tramite HTTPS, concedere il microfono e mantenere la pagina in primo piano. Le clip vengono create localmente sul dispositivo.</div>
+<section class="card">
+<div class="title">Eventi e clip</div><div id="events" class="events"><div class="empty">Nessun evento rilevato.</div></div>
+<audio id="clipPlayer" class="clip-player" controls playsinline preload="metadata"></audio>
+<div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA ORA</button><button id="clear" class="btn secondary">AZZERA</button></div>
+<div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SALVA SESSIONE</button><button id="saveLog" class="btn secondary">SALVA LOG</button></div>
 </section>
+<section class="card disclaimer"><div class="note"><b>Interpretazione corretta:</b> marker e parole indicano risultati acustici o ipotesi del riconoscimento vocale. Non dimostrano un'origine paranormale.</div><div class="tech">Su iPhone aprire in Safari tramite HTTPS e mantenere la pagina in primo piano. Le clip evento sono create localmente in WAV. Il riconoscimento parole dipende dalle funzioni disponibili in Safari.</div></section>
 </div>
-<script src="app.js" defer></script>
+<script src="app.js?v=2.1" defer></script>
 </body></html>
