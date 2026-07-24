@@ -1,4 +1,4 @@
-const CACHE='myspiritmic-v1';
+const CACHE='myspiritmic-v1.1';
 const CORE=['./','./index.html','./style.css','./app.js','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
