@@ -3,64 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#05080c">
+<meta name="theme-color" content="#071018">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EVP Recorder">
 <link rel="manifest" href="manifest.webmanifest">
-<title>EVP Recorder Lab — Registrazione e analisi audio</title>
+<title>EVP Recorder Lab</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
 <header>
-  <div><div class="eyebrow">FIELD AUDIO INVESTIGATION</div><h1>EVP RECORDER <em>LAB</em></h1><div class="sub">Registratore digitale per sessioni EVP, analisi dello spettro e marcatura degli eventi acustici.</div></div>
+  <div><div class="eyebrow">FIELD AUDIO ANALYSIS</div><h1>EVP RECORDER <em>LAB</em></h1><div class="sub">Registrazione automatica a eventi, spettrogramma temporale e analisi dei suoni non classificati.</div></div>
   <div id="status" class="status"><span class="dot"></span><span id="statusText">IN ATTESA</span></div>
 </header>
 
-<section class="protocol">
-  <span class="protocol-index">01</span><div><b>Protocollo pulito</b><small>Registra prima 30 secondi di ambiente senza domande. Evita rumori, movimenti e altoparlanti attivi.</small></div>
-</section>
-
 <section class="card recorder-card">
-<div class="screen-label"><span>LIVE SPECTRUM</span><span>MIC INPUT / LOCAL</span></div>
-<canvas id="spectrum"></canvas><canvas id="wave"></canvas>
-<div class="hud">
-<div class="metric"><span>Banda</span><strong id="band">300–3400 <small>Hz</small></strong></div>
-<div class="metric"><span>Livello RMS</span><strong id="db">−∞ <small>dBFS</small></strong><div class="meter"><i id="bar"></i></div></div>
-<div class="metric"><span>Picco</span><strong id="peak">— <small>Hz</small></strong></div>
-</div>
-<div class="buttons"><button id="start" class="btn">ATTIVA MICROFONO</button><button id="record" class="btn record" disabled>REGISTRA</button></div>
+  <div class="screen-label"><span>SPETTROGRAMMA LIVE</span><span id="elapsed">00:00.0</span></div>
+  <div class="spectrogram-wrap">
+    <canvas id="spectrum" aria-label="Spettrogramma in tempo reale"></canvas>
+    <div id="markerLayer" class="marker-layer" aria-hidden="true"></div>
+  </div>
+  <canvas id="wave" aria-label="Forma d'onda"></canvas>
+  <div class="legend"><span><i class="normal"></i>ambiente</span><span><i class="voice"></i>possibile voce</span><span><i class="anomaly"></i>evento sospetto EVP</span></div>
+  <div class="hud">
+    <div class="metric"><span>Stato analisi</span><strong id="analysisState">—</strong></div>
+    <div class="metric"><span>Livello RMS</span><strong id="db">−∞ <small>dBFS</small></strong><div class="meter"><i id="bar"></i></div></div>
+    <div class="metric"><span>Picco</span><strong id="peak">— <small>Hz</small></strong></div>
+  </div>
+  <div class="buttons"><button id="start" class="btn">ATTIVA MICROFONO</button><button id="record" class="btn record" disabled>REGISTRA SESSIONE</button></div>
 </section>
 
 <section class="card">
-<div class="title">Profilo di acquisizione</div>
-<div id="modes" class="seg"><button data-mode="voice" class="active">VOCE</button><button data-mode="wide">AMPIA</button><button data-mode="sweep">SCAN</button></div>
-<div class="mode-help"><b>VOCE</b> privilegia la banda tipica del parlato. <b>AMPIA</b> conserva più rumore ambientale. <b>SCAN</b> esplora ciclicamente le frequenze: utile per confronto, non prova la presenza di voci.</div>
-<div class="control"><div class="control-head"><span>Soglia evento</span><b id="thresholdLabel">−38 dB</b></div><input id="threshold" type="range" min="-65" max="-12" value="-38"></div>
-<div class="control"><div class="control-head"><span>Sensibilità variazioni</span><b id="sensitivityLabel">55%</b></div><input id="sensitivity" type="range" min="10" max="95" value="55"></div>
-<div id="sweepControl" class="control hidden"><div class="control-head"><span>Velocità scan</span><b id="sweepLabel">1.8 s</b></div><input id="sweepSpeed" type="range" min="4" max="35" value="18"></div>
-<div class="row"><div class="copy"><b>Marcatura automatica</b><small>Registra nel log le variazioni reali di livello e spettro.</small></div><label class="switch"><input id="autoMark" type="checkbox" checked><span class="slider"></span></label></div>
-<div class="row"><div class="copy"><b>Monitor filtrato</b><small>Usare esclusivamente con cuffie per evitare feedback acustico.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div>
+  <div class="title">Rilevamento automatico</div>
+  <div class="row"><div class="copy"><b>Clip automatiche</b><small>Conserva circa 4 secondi prima e 5 secondi dopo ogni evento.</small></div><label class="switch"><input id="autoClip" type="checkbox" checked><span class="slider"></span></label></div>
+  <div class="control"><div class="control-head"><span>Soglia minima</span><b id="thresholdLabel">−42 dB</b></div><input id="threshold" type="range" min="-65" max="-18" value="-42"></div>
+  <div class="control"><div class="control-head"><span>Sensibilità anomalie</span><b id="sensitivityLabel">62%</b></div><input id="sensitivity" type="range" min="20" max="95" value="62"></div>
+  <div class="row"><div class="copy"><b>Monitor filtrato</b><small>Attivare solo con cuffie per evitare feedback.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div>
 </section>
 
 <section class="card">
-<div class="title">Registro sessione</div><div id="events" class="events"><div class="empty">Nessun evento marcato.</div></div>
-<div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA EVENTO</button><button id="clear" class="btn secondary">AZZERA</button></div>
-<div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SALVA AUDIO</button><button id="saveLog" class="btn secondary">SALVA LOG</button></div>
+  <div class="title">Eventi e clip</div>
+  <div id="events" class="events"><div class="empty">Nessun evento rilevato.</div></div>
+  <div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA ORA</button><button id="clear" class="btn secondary">AZZERA</button></div>
+  <div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SALVA SESSIONE</button><button id="saveLog" class="btn secondary">SALVA LOG</button></div>
 </section>
 
-<section class="card method-card">
-<div class="title">Metodo di verifica</div>
-<div class="method-grid">
-<div><span>1</span><b>Controllo</b><small>Registra il rumore di fondo prima e dopo la sessione.</small></div>
-<div><span>2</span><b>Marcatura</b><small>Segna dal vivo colpi, passi, traffico e rumori noti.</small></div>
-<div><span>3</span><b>Ascolto cieco</b><small>Fai ascoltare il frammento senza suggerire parole.</small></div>
-<div><span>4</span><b>Confronto</b><small>Una forma simile a una voce non dimostra da sola la sua origine.</small></div>
-</div>
+<section class="card disclaimer">
+  <div class="note"><b>Interpretazione corretta:</b> i marker indicano segnali acustici insoliti o compatibili con il parlato. Non dimostrano un'origine paranormale. Ogni clip va confrontata con rumori ambientali, persone presenti, traffico e dispositivi elettronici.</div>
+  <div class="tech">Su iPhone aprire in Safari tramite HTTPS, concedere il microfono e mantenere la pagina in primo piano. Le clip vengono create localmente sul dispositivo.</div>
 </section>
-
-<section class="card disclaimer"><div class="note"><b>Che cosa fa realmente:</b> usa il microfono del dispositivo, visualizza intensità e spettro, applica filtri, registra l’audio e crea un registro temporale. Non genera parole, non riceve frequenze radio e non può stabilire se un suono abbia origine paranormale.</div><div class="tech">Su iPhone: aprire da Safari tramite HTTPS, concedere il microfono e mantenere la pagina in primo piano. Per risultati più controllabili usare modalità aereo, cuffie cablate e una stanza silenziosa.</div></section>
 </div>
 <script src="app.js" defer></script>
 </body></html>
