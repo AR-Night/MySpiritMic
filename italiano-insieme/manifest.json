@@ -1,0 +1,11 @@
+{
+  "name": "Italiano Insieme",
+  "short_name": "Italiano",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f3ed",
+  "theme_color": "#123f57",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
