@@ -17,70 +17,15 @@
   <div><div class="eyebrow">FIELD AUDIO ANALYSIS</div><h1>EVP RECORDER <em>LAB</em></h1><div class="sub">Spettrogramma temporale, clip automatiche e analisi prudente dei segnali vocali.</div></div>
   <div id="status" class="status"><span class="dot"></span><span id="statusText">IN ATTESA</span></div>
 </header>
-
 <section class="card recorder-card">
   <div class="screen-label"><span>SPETTROGRAMMA LIVE</span><span id="elapsed">00:00.0</span></div>
-  <div class="spectrogram-grid">
-    <div class="db-axis"><span>forte</span><span>medio</span><span>debole</span></div>
-    <div class="spectrogram-wrap">
-      <canvas id="spectrum" aria-label="Spettrogramma in tempo reale"></canvas>
-      <div id="markerLayer" class="marker-layer" aria-hidden="true"></div>
-      <div id="wordOverlay" class="word-overlay hidden"><small>INTERPRETAZIONE LIVE</small><strong id="wordLive">—</strong><span id="wordConfidence"></span></div>
-    </div>
-    <div class="hz-axis"><span>8 kHz</span><span>4 kHz</span><span>2 kHz</span><span>1 kHz</span><span>250 Hz</span></div>
-  </div>
-  <div class="time-axis"><span>prima</span><span>tempo →</span><span>adesso</span></div>
-  <canvas id="wave" aria-label="Forma d'onda"></canvas>
+  <div class="spectrogram-grid"><div class="db-axis"><span>forte</span><span>medio</span><span>debole</span></div><div class="spectrogram-wrap"><canvas id="spectrum"></canvas><div id="markerLayer" class="marker-layer"></div><div id="wordOverlay" class="word-overlay hidden"><small>INTERPRETAZIONE LIVE</small><strong id="wordLive">—</strong><span id="wordConfidence"></span></div></div><div class="hz-axis"><span>8 kHz</span><span>4 kHz</span><span>2 kHz</span><span>1 kHz</span><span>250 Hz</span></div></div>
+  <div class="time-axis"><span>prima</span><span>tempo →</span><span>adesso</span></div><canvas id="wave"></canvas>
   <div class="legend"><span><i class="normal"></i>ambiente</span><span><i class="voice"></i>possibile voce</span><span><i class="anomaly"></i>evento anomalo</span></div>
-
-  <div class="analysis-grid">
-    <div class="metric state"><span>Classificazione</span><strong id="analysisState">—</strong></div>
-    <div class="metric"><span>Rumore di fondo</span><strong id="noiseFloor">— <small>dBFS</small></strong></div>
-    <div class="metric"><span>Energia vocale</span><strong id="voiceEnergy">0 <small>%</small></strong></div>
-    <div class="metric"><span>Anomalia</span><strong id="anomalyScore">0 <small>%</small></strong></div>
-    <div class="metric"><span>Rapporto S/N</span><strong id="snr">— <small>dB</small></strong></div>
-    <div class="metric"><span>Picco dominante</span><strong id="peak">— <small>Hz</small></strong></div>
-  </div>
+  <div class="analysis-grid"><div class="metric state"><span>Classificazione</span><strong id="analysisState">—</strong></div><div class="metric"><span>Rumore di fondo</span><strong id="noiseFloor">— <small>dBFS</small></strong></div><div class="metric"><span>Energia vocale</span><strong id="voiceEnergy">0 <small>%</small></strong></div><div class="metric"><span>Anomalia</span><strong id="anomalyScore">0 <small>%</small></strong></div><div class="metric"><span>Rapporto S/N</span><strong id="snr">— <small>dB</small></strong></div><div class="metric"><span>Picco dominante</span><strong id="peak">— <small>Hz</small></strong></div></div>
   <div class="buttons"><button id="start" class="btn">ATTIVA MICROFONO</button><button id="record" class="btn record" disabled>REGISTRA SESSIONE</button></div>
 </section>
-
-<section class="card">
-  <div class="title">Rilevamento automatico</div>
-  <div class="setting-block">
-    <div class="row"><div class="copy"><b>Clip automatiche WAV</b><small>Conserva circa 4 secondi prima e 5 secondi dopo un evento. Il WAV è riproducibile direttamente su iPhone.</small></div><label class="switch"><input id="autoClip" type="checkbox" checked><span class="slider"></span></label></div>
-  </div>
-  <div class="setting-block">
-    <div class="control-head"><span>Soglia minima</span><b id="thresholdLabel">−58 dB</b></div>
-    <input id="threshold" type="range" min="-75" max="-25" value="-58">
-    <p>Esclude il rumore molto debole. Più vai verso −75 dB, più l'app considera anche segnali tenui.</p>
-  </div>
-  <div class="setting-block">
-    <div class="control-head"><span>Sensibilità anomalie</span><b id="sensitivityLabel">58%</b></div>
-    <input id="sensitivity" type="range" min="20" max="90" value="58">
-    <p>Regola quanto facilmente una variazione di frequenze viene marcata. Non misura il “paranormale”.</p>
-  </div>
-  <div class="setting-block">
-    <div class="row"><div class="copy"><b>Interpretazione parole nello spettro</b><small>Mostra sopra il grafico le parole riconosciute dal motore vocale di Safari, quando disponibile.</small></div><label class="switch"><input id="wordsEnabled" type="checkbox" checked><span class="slider"></span></label></div>
-    <button id="wordsButton" class="btn secondary full">AVVIA INTERPRETAZIONE PAROLE</button>
-    <p id="wordsHelp" class="setting-note">È una trascrizione sperimentale del parlato captato dal microfono. Può interpretare erroneamente rumori casuali.</p>
-  </div>
-  <div class="setting-block">
-    <div class="row"><div class="copy"><b>Monitor filtrato</b><small>Riascolto live. Attivare solo con cuffie per evitare feedback.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div>
-  </div>
-</section>
-
-<section class="card">
-  <div class="title">Eventi e clip</div>
-  <div id="events" class="events"><div class="empty">Nessun evento rilevato.</div></div>
-  <audio id="clipPlayer" class="clip-player hidden" controls playsinline></audio>
-  <div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA ORA</button><button id="clear" class="btn secondary">AZZERA</button></div>
-  <div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SALVA SESSIONE</button><button id="saveLog" class="btn secondary">SALVA LOG</button></div>
-</section>
-
-<section class="card disclaimer">
-  <div class="note"><b>Interpretazione corretta:</b> il sistema distingue rumore di fondo, energia compatibile con il parlato e variazioni spettrali insolite. Un colpo sul microfono può produrre un punteggio elevato: per questo gli eventi impulsivi vengono ora classificati separatamente e declassati.</div>
-  <div class="tech">Le parole mostrate sono ipotesi del riconoscimento vocale del browser, non messaggi confermati. Confrontare sempre la clip originale con persone presenti, traffico, elettrodomestici e movimenti del telefono.</div>
-</section>
-</div>
-<script src="app.js?v=23" defer></script>
-</body></html>
+<section class="card"><div class="title">Rilevamento automatico</div><div class="setting-block"><div class="row"><div class="copy"><b>Clip automatiche WAV</b><small>Conserva circa 4 secondi prima e 5 secondi dopo un evento. Il WAV è riproducibile direttamente su iPhone.</small></div><label class="switch"><input id="autoClip" type="checkbox" checked><span class="slider"></span></label></div></div><div class="setting-block"><div class="control-head"><span>Soglia minima</span><b id="thresholdLabel">−58 dB</b></div><input id="threshold" type="range" min="-75" max="-25" value="-58"><p>Esclude il rumore molto debole. Più vai verso −75 dB, più l'app considera anche segnali tenui.</p></div><div class="setting-block"><div class="control-head"><span>Sensibilità anomalie</span><b id="sensitivityLabel">58%</b></div><input id="sensitivity" type="range" min="20" max="90" value="58"><p>Regola quanto facilmente una variazione di frequenze viene marcata. Non misura il paranormale.</p></div><div class="setting-block"><div class="row"><div class="copy"><b>Interpretazione parole nello spettro</b><small>Mostra sopra il grafico le parole riconosciute dal motore vocale di Safari, quando disponibile.</small></div><label class="switch"><input id="wordsEnabled" type="checkbox" checked><span class="slider"></span></label></div><button id="wordsButton" class="btn secondary full">AVVIA INTERPRETAZIONE PAROLE</button><p id="wordsHelp">È una trascrizione sperimentale del parlato captato dal microfono. Può interpretare erroneamente rumori casuali.</p></div><div class="setting-block"><div class="row"><div class="copy"><b>Monitor filtrato</b><small>Riascolto live. Attivare solo con cuffie per evitare feedback.</small></div><label class="switch"><input id="monitor" type="checkbox"><span class="slider"></span></label></div></div></section>
+<section class="card"><div class="title">Eventi e clip</div><div id="events" class="events"><div class="empty">Nessun evento rilevato.</div></div><audio id="clipPlayer" class="clip-player hidden" controls playsinline></audio><div class="downloads"><button id="mark" class="btn secondary" disabled>MARCA ORA</button><button id="clear" class="btn secondary">AZZERA</button></div><div id="downloads" class="downloads hidden"><button id="saveAudio" class="btn secondary">SALVA SESSIONE</button><button id="saveLog" class="btn secondary">SALVA LOG</button></div></section>
+<section class="card disclaimer"><div class="note"><b>Interpretazione corretta:</b> il sistema distingue rumore di fondo, energia compatibile con il parlato e variazioni spettrali insolite. Un colpo sul microfono può produrre un punteggio elevato: per questo gli eventi impulsivi vengono classificati separatamente e declassati.</div><div class="tech">Le parole mostrate sono ipotesi del riconoscimento vocale del browser, non messaggi confermati. Confrontare sempre la clip originale con persone presenti, traffico, elettrodomestici e movimenti del telefono.</div></section>
+</div><script src="app-v23.js?v=23" defer></script></body></html>
